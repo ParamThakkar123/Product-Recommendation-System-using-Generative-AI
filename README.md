@@ -51,8 +51,20 @@ Implement mechanisms where the system learns from user interactions to improve r
 - **Regional Trends**: Incorporate regional trends and preferences to tailor recommendations to local markets.
 
 ## Project Setup
+```python
+# 1. Create the following api keys and include them in .env file
+GEMINI_API_KEY='YOUR API KEY HERE'
+GROQ_API_KEY='YOUR API KEY HERE'
+```
 
-
+```python
+# 2. To install the required dependencies
+pip install -r requirements.txt
+```
+```python
+# 3. To run the python file using streamlit
+streamlit run main.py
+```
 
 ## Team Members
 
@@ -61,4 +73,4 @@ Implement mechanisms where the system learns from user interactions to improve r
 
 ## Screenshots 📸
 
-## Demo Video Link
+## Demo Video Link 🎥
