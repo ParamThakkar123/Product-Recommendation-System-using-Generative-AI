@@ -7,11 +7,42 @@ from crewai import Agent, Task, Crew, Process
 from crewai_tools import WebsiteSearchTool, SerperDevTool
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+import requests
+
+# Mapping of countries to their currencies
+country_currency = {
+    "United States": "USD",
+    "Eurozone": "EUR",
+    "Australia": "AUD",
+    "India": "INR",
+    # Add more countries and their currencies as needed
+}
+
+# Function to get the conversion rate
+def get_conversion_rate(base_currency, target_currency):
+    api_key = os.getenv("CURRENCY_API_KEY")  # Store your API key in .env file
+    url = f"https://api.exchangerate-api.com/v4/latest/{base_currency}"
+    response = requests.get(url)
+    
+    # if response.status_code == 200:
+    #     data = response.json()
+    #     if target_currency in data['rates']:
+    #         return data['rates'][target_currency]
+    #     else:
+    #         st.error(f"Currency {target_currency} not available.")
+    #         return None
+    # else:
+    #     st.error("Failed to fetch conversion rates.")
+    #     return None
 
 def main():
     st.title("Hyperpersonalization and Prompt-based Shopping Experience using Generative AI")
 
     st.sidebar.header("Upload Files")
+
+    # Country selection
+    selected_country = st.sidebar.selectbox("Select a Country", list(country_currency.keys()))
+    currency = country_currency[selected_country]
 
     model_type = st.sidebar.selectbox(
         "Choose the type of model",
@@ -19,6 +50,10 @@ def main():
     )
 
     st.write(f"### Selected Model: {model_type}")
+    st.write(f"### Selected Country: {selected_country} (Currency: {currency})")
+
+    # Get conversion rate for USD to selected currency
+    conversion_rate = get_conversion_rate("USD", currency)
 
     if model_type == "Image Question Answering Model":
         load_dotenv()
@@ -55,10 +90,7 @@ def main():
             if questions:
                 analyze_image_task = Task(
                     description=(
-                        f"Answer any user questions ({questions}) based on the image analysis, and provide recommendations "
-                        "for products similar to those asked. Use relevant websites to gather "
-                        "information about these products. Give links to relevant websites where the product can be purchased "
-                        "and their approximate prices."
+                        f"Based on the image analysis, please address any user questions ({questions}) and provide tailored recommendations for products similar to those inquired about. Utilize reputable websites to gather detailed information about these products. Include direct links to these websites for purchasing, and present the approximate prices exclusively in the currency of {selected_country}."
                     ),
                     expected_output="Detailed answers to user questions and a list of recommendations for products with links to where they can be purchased.",
                     tool=[WebsiteSearchTool, SerperDevTool],
@@ -72,7 +104,10 @@ def main():
                 )
 
                 result = image_analysis_crew.kickoff()
-                st.write(result)
+                result_str = str(result)  # Convert result to string
+
+                # Display the result directly
+                st.write(result_str)
 
     elif model_type == "Recommendation Model":
         load_dotenv()
@@ -109,7 +144,10 @@ def main():
         if text_prompt:
             st.write("You entered:", text_prompt)
             result = crew.kickoff()
-            st.write(result)
+            result_str = str(result)  # Convert result to string
+
+            # Display the result directly
+            st.write(result_str)
 
     elif model_type == "Web Searching Model":
         load_dotenv()
@@ -119,7 +157,7 @@ def main():
         search_agent = Agent(
             role="Web Search Agent",
             goal="To search for information about the given query on the web",
-            backstory="You are a web search agent with the ability to gather relevant information from the internet to answer queries. Use the provided tools to find the most accurate and comprehensive answers. Suggest relevant websites where the user can buy the product they asked for and provide an approximate price.",
+            backstory=f"You are an expert web search agent with the ability to gather the most relevant and comprehensive information from the internet to answer queries. Use the provided tools to find the most accurate answers and suggest reputable websites where the user can purchase the requested product. Provide the approximate price in the currency of the selected country ({selected_country}) to help the user make an informed decision.",
             tool=[SerperDevTool, WebsiteSearchTool],
             verbose=True,
             llm=llm,
@@ -145,7 +183,10 @@ def main():
         if search_query:
             st.write("Searching for:", search_query)
             result = crew.kickoff()
-            st.write(result)
+            result_str = str(result)  # Convert result to string
+
+            # Display the result directly
+            st.write(result_str)
 
 if __name__ == '__main__':
     main()
