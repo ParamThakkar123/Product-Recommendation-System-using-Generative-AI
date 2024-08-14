@@ -7,11 +7,44 @@ from crewai import Agent, Task, Crew, Process
 from crewai_tools import WebsiteSearchTool, SerperDevTool
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+import requests
+
+# Mapping of countries to their currencies
+country_currency = {
+    "United States": "USD",
+    "Canada": "CAD",
+    "United Kingdom": "GBP",
+    "Eurozone": "EUR",
+    "Australia": "AUD",
+    "India": "INR",
+    # Add more countries and their currencies as needed
+}
+
+# Function to get the conversion rate
+def get_conversion_rate(base_currency, target_currency):
+    api_key = os.getenv("CURRENCY_API_KEY")  # Store your API key in .env file
+    url = f"https://api.exchangerate-api.com/v4/latest/{base_currency}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if target_currency in data['rates']:
+            return data['rates'][target_currency]
+        else:
+            st.error(f"Currency {target_currency} not available.")
+            return None
+    else:
+        st.error("Failed to fetch conversion rates.")
+        return None
 
 def main():
     st.title("Hyperpersonalization and Prompt-based Shopping Experience using Generative AI")
 
     st.sidebar.header("Upload Files")
+
+    # Country selection
+    selected_country = st.sidebar.selectbox("Select a Country", list(country_currency.keys()))
+    currency = country_currency[selected_country]
 
     model_type = st.sidebar.selectbox(
         "Choose the type of model",
@@ -19,6 +52,10 @@ def main():
     )
 
     st.write(f"### Selected Model: {model_type}")
+    st.write(f"### Selected Country: {selected_country} (Currency: {currency})")
+
+    # Get conversion rate for USD to selected currency
+    conversion_rate = get_conversion_rate("USD", currency)
 
     if model_type == "Image Question Answering Model":
         load_dotenv()
@@ -72,7 +109,23 @@ def main():
                 )
 
                 result = image_analysis_crew.kickoff()
-                st.write(result)
+                result_str = str(result)  # Convert result to string
+
+                # Display the result and convert prices
+                if conversion_rate:
+                    # Assuming the result contains prices in USD
+                    # Extract prices from the result (this is a placeholder)
+                    prices_in_usd = [100, 200]  # Replace with actual extraction logic
+                    converted_prices = [price * conversion_rate for price in prices_in_usd]
+
+                    # Integrate prices into the result
+                    formatted_result = result_str + "\n\n### Product Recommendations with Prices:\n"
+                    for i, price in enumerate(converted_prices):
+                        formatted_result += f"- Product {i + 1}: Price: {price:.2f} {currency}\n"
+
+                    st.write(formatted_result)
+                else:
+                    st.write(result_str)
 
     elif model_type == "Recommendation Model":
         load_dotenv()
@@ -109,7 +162,23 @@ def main():
         if text_prompt:
             st.write("You entered:", text_prompt)
             result = crew.kickoff()
-            st.write(result)
+            result_str = str(result)  # Convert result to string
+
+            # Convert prices to the selected currency
+            if conversion_rate:
+                # Assuming the result contains prices in USD
+                # Extract prices from the result (this is a placeholder)
+                prices_in_usd = [100, 150]  # Replace with actual extraction logic
+                converted_prices = [price * conversion_rate for price in prices_in_usd]
+
+                # Integrate prices into the result
+                formatted_result = result_str + "\n\n### Product Recommendations with Prices:\n"
+                for i, price in enumerate(converted_prices):
+                    formatted_result += f"- Product {i + 1}: Price: {price:.2f} {currency}\n"
+
+                st.write(formatted_result)
+            else:
+                st.write(result_str)
 
     elif model_type == "Web Searching Model":
         load_dotenv()
@@ -145,7 +214,23 @@ def main():
         if search_query:
             st.write("Searching for:", search_query)
             result = crew.kickoff()
-            st.write(result)
+            result_str = str(result)  # Convert result to string
+
+            # Convert prices to the selected currency
+            if conversion_rate:
+                # Assuming the result contains prices in USD
+                # Extract prices from the result (this is a placeholder)
+                prices_in_usd = [100, 250]  # Replace with actual extraction logic
+                converted_prices = [price * conversion_rate for price in prices_in_usd]
+
+                # Integrate prices into the result
+                formatted_result = result_str + "\n\n### Product Recommendations with Prices:\n"
+                for i, price in enumerate(converted_prices):
+                    formatted_result += f"- Product {i + 1}: Price: {price:.2f} {currency}\n"
+
+                st.write(formatted_result)
+            else:
+                st.write(result_str)
 
 if __name__ == '__main__':
     main()
