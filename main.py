@@ -18,22 +18,7 @@ country_currency = {
     # Add more countries and their currencies as needed
 }
 
-# Function to get the conversion rate
-def get_conversion_rate(base_currency, target_currency):
-    api_key = os.getenv("CURRENCY_API_KEY")  # Store your API key in .env file
-    url = f"https://api.exchangerate-api.com/v4/latest/{base_currency}"
-    response = requests.get(url)
-    
-    # if response.status_code == 200:
-    #     data = response.json()
-    #     if target_currency in data['rates']:
-    #         return data['rates'][target_currency]
-    #     else:
-    #         st.error(f"Currency {target_currency} not available.")
-    #         return None
-    # else:
-    #     st.error("Failed to fetch conversion rates.")
-    #     return None
+
 
 def main():
     st.title("Hyperpersonalization and Prompt-based Shopping Experience using Generative AI")
@@ -52,17 +37,17 @@ def main():
     st.write(f"### Selected Model: {model_type}")
     st.write(f"### Selected Country: {selected_country} (Currency: {currency})")
 
-    # Get conversion rate for USD to selected currency
-    conversion_rate = get_conversion_rate("USD", currency)
+   
 
     if model_type == "Image Question Answering Model":
         load_dotenv()
 
+        
         gemini_api_key = os.getenv("GEMINI_API_KEY")
         genai.configure(api_key=gemini_api_key)
 
         model = genai.GenerativeModel("gemini-1.5-pro")
-        llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key="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")
+        llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key=os.environ["GROQ_API_KEY"])
 
         uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 

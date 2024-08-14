@@ -16,7 +16,7 @@ genai.configure(api_key=gemini_api_key)
 
 # Define the model
 model = genai.GenerativeModel("gemini-1.5-pro")
-llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key="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")
+llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key=os.environ["GROQ_API_KEY"])
 
 # File uploader for the user to upload an image
 uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])

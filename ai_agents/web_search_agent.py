@@ -13,7 +13,7 @@ st.title("Web Search Agent")
 st.write("### Enter a Search Query")
 search_query = st.text_input("Your Search Query")
 
-llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key="AIzaSyA_6sGQ0XzmUaGuWX85gpmn19vrvlmPJhM")
+llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=os.getenv("GEMINI_API_KEY"))
 
 search_agent = Agent(
     role="Web Search Agent",
