@@ -18,8 +18,6 @@ country_currency = {
     # Add more countries and their currencies as needed
 }
 
-
-
 def main():
     st.title("Hyperpersonalization and Prompt-based Shopping Experience using Generative AI")
 
@@ -75,7 +73,7 @@ def main():
             if questions:
                 analyze_image_task = Task(
                     description=(
-                        f"Based on the image analysis, please address any user questions ({questions}) and provide tailored recommendations for products similar to those inquired about. Utilize reputable websites to gather detailed information about these products. Include direct links to these websites for purchasing, and present the approximate prices exclusively in the currency of {selected_country}."
+                        f"Based on the image analysis, please address any user questions ({questions}) and provide tailored recommendations for products similar to those inquired about. Suggest web links as accurately as possible. Utilize reputable websites to gather detailed information about these products. Include direct links to these websites for purchasing, and present the approximate prices exclusively in the currency of {selected_country}."
                     ),
                     expected_output="Detailed answers to user questions and a list of recommendations for products with links to where they can be purchased.",
                     tool=[WebsiteSearchTool, SerperDevTool],
@@ -142,7 +140,7 @@ def main():
         search_agent = Agent(
             role="Web Search Agent",
             goal="To search for information about the given query on the web",
-            backstory=f"You are an expert web search agent with the ability to gather the most relevant and comprehensive information from the internet to answer queries. Use the provided tools to find the most accurate answers and suggest reputable websites where the user can purchase the requested product. Provide the approximate price in the currency of the selected country ({selected_country}) to help the user make an informed decision.",
+            backstory=f"You are an expert web search agent with the ability to gather the most relevant and comprehensive information from the internet to answer queries. Be as accurate as possible at suggesting sites. Use the provided tools to find the most accurate answers and suggest reputable websites where the user can purchase the requested product. Provide the approximate price in the currency of the selected country ({selected_country}) to help the user make an informed decision.",
             tool=[SerperDevTool, WebsiteSearchTool],
             verbose=True,
             llm=llm,
