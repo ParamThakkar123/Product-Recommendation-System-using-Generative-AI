@@ -72,5 +72,13 @@ streamlit run main.py
 - [Anushka Yadav](https://github.com/2412anushka) 👤
 
 ## Screenshots 📸
+![Screenshot 2024-08-15 010319](https://github.com/user-attachments/assets/b994cb9a-a09b-478c-8f8b-5840ed7554fe)
+![Screenshot 2024-08-15 010405](https://github.com/user-attachments/assets/b9952192-923e-4972-a2b4-fbdac17991d1)
+![Screenshot 2024-08-15 010424](https://github.com/user-attachments/assets/c7603f4b-0e2a-47a6-af47-cce3bab23b76)
+![Screenshot 2024-08-15 010501](https://github.com/user-attachments/assets/4b2b55a4-ae5a-470e-a44a-39b7cd82197c)
+![Screenshot 2024-08-15 010654](https://github.com/user-attachments/assets/5d94d40e-4e43-4fe3-abe3-f9667ff4b4e9)
+![Screenshot 2024-08-15 010757](https://github.com/user-attachments/assets/69020b87-71e2-489b-8793-752c9b882955)
 
 ## Demo Video Link 🎥
+
+- [Demo Video](https://youtu.be/Yuke-ewHlcg)
