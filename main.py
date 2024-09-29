@@ -98,7 +98,7 @@ elif model_type == "Recommendation Model":
         goal="""To give personalized product recommendations for any product based on user preferences""",
         backstory="""You are the best product recommendation agent in the world.
         You have knowledge about any product the customer asks you for. Your recommendations are logical and can convince
-        the people who are looking for the product. Don't ask the user what brand they want to buy. Suggest everything you know using the tools you have.""",
+        the people who are looking for the product. Don't ask the user what brand they want to buy. Suggest everything you know using the tools you have. Always give a list of items in recommendations""",
         tools=[serper_tool],  # Properly initialized tools
         verbose=True,
         llm=llm,
