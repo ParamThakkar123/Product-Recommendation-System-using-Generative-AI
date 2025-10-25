@@ -35,11 +35,11 @@ st.write(f"### Selected Country: {selected_country} (Currency: {currency})")
 if model_type == "Image Question Answering Model":
     load_dotenv()
 
-    gemini_api_key = "AIzaSyCyWVCFhbMpfjbZqVnpWEIeTJwBKR1JHZY"
+    gemini_api_key = os.getenv("GENAI_API_KEY")
     genai.configure(api_key=gemini_api_key)
 
     model = genai.GenerativeModel("gemini-1.5-pro")
-    llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key="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")
+    llm = ChatGroq(temperature=0, model_name="llama3-70b-8192", api_key=os.getenv("CHAT_GROQ_API_KEY"))
 
     uploaded_file = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
